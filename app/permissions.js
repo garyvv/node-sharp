@@ -26,8 +26,6 @@ module.exports = function (resource) {
 				ctx.cookies.get('token') : ctx.request.headers.token
 			let resourceUid = ctx.params.uid
 
-			console.log('token: ' + token)
-
 			if (!token || !resourceUid) {
 				return false
 			}
@@ -53,7 +51,6 @@ module.exports = function (resource) {
 		}
 
 		let permission = permissions[resource]
-		console.log(permission)
 		let isInPermissions
 
 		//public权限直接通过
@@ -68,18 +65,13 @@ module.exports = function (resource) {
 		for (var i in permission) {
 			if (permission[i].role.indexOf('private') >= 0) {
 				let check = await checkToken()
-				console.log('check222222: ')
-				console.log(check)
-				if (check) {
-					console.log('IN')
+				if (!!check === true) {
 					isInPermissions = true
 					await pass()
 				}
-				console.log('No!')
 			}
 		}
 
-		console.log('isInPermissions: ' + isInPermissions)
 		if (!isInPermissions) await reject(403);
 	}
 
