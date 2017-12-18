@@ -1,0 +1,12 @@
+{
+  "name": "node-sharp api",
+  "version": "1.0.0",
+  "description": "node-sharpapi",
+  "title": "node-sharpapi",
+  "url": "http://sharp.miaoke.tech",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  },
+  "sampleUrl": "http://sharp.miaoke.tech"
+}
