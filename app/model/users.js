@@ -1,4 +1,9 @@
 const db = require('../../config/db.js')
+const base = require('./base')
+
+let table = 'st_depots'
+base.setTable(table)
+
 
 module.exports = {
 	
@@ -12,7 +17,14 @@ module.exports = {
 		      	reject(error)
 		    });
         })
-        return await user
+		return await user
+		
+	},
+
+	addUser:async function(data) {
+		let result = await base.execInsert(data);
+
+		return await result
 	}
 
 }
