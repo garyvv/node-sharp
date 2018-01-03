@@ -25,6 +25,12 @@ module.exports = {
 		let result = await base.execInsert(data);
 
 		return await result
+	},
+
+	editUser:async function(data, where, notWhere = {}) {
+		let result = await base.execUpdate(data, where, notWhere);
+
+		return await result
 	}
 
 }
