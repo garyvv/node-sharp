@@ -1,24 +1,11 @@
 const response = require('../util/response.js')
-const validate = require('../util/validate')
+const validate = require('../util/validate.js')
 const modelUser = require('../model/users')
 
 module.exports = {
 
 	test: async function (ctx, next) {
-
-		let rules = {
-			'uid': 'required|numeric|in:"0","3","4"',
-			'filter': 'required|in:1,2,3'
-		}
-
-		let message = {
-			'uid.required': 'kkkk',
-			'uid.numeric': '数字数字',
-			'uid.in': 'uid 必须在xxx范围内'
-		}
-
-		validate(ctx, rules, message)
-
+		console.log(ctx.params)
 		let insertData = [
 			{
 				'name': 'test',
@@ -38,9 +25,9 @@ module.exports = {
 			'description': 'test4'
 		}
 
-		// let data = await modelUser.addUser(insertData)
+		let data = await modelUser.addUser(insertData)
 
-		response.output(ctx, insertData)
+		response.output(ctx, data)
 	},
 
 	edit: async function (ctx, next) {
