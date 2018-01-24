@@ -1,6 +1,6 @@
 //页面错误处理
 module.exports = async function (ctx, next) {
-	await next();
+	await next()
 	if (parseInt(ctx.status) === 404) {
 		ctx.body = {
 			code: 500,
@@ -25,5 +25,5 @@ module.exports = async function (ctx, next) {
 			msg: !!this.message === true ? this.message : '内部错误,服务器开小差'
 		}
 	}
-};
+}
 

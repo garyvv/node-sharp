@@ -23,6 +23,6 @@ var config = {
       database: '',
       connectionLimit: 3
     },
-  };
+  }
   
-  module.exports = config;
+  module.exports = config

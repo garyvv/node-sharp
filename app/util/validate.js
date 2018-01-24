@@ -5,13 +5,13 @@ module.exports = function (ctx, rules, message = {}) {
     switch (method) {
         case 'GET':
             input = ctx.query
-            break;
+            break
         case 'PUT':
         case 'POST':
             input = ctx.request.body
-            break;
+            break
         default:
-            break;
+            break
     }
 
     for (let field in rules) {
@@ -29,7 +29,7 @@ module.exports = function (ctx, rules, message = {}) {
             }
 
             // 非必填项，有值再进行判断
-            if (!!input[field] === false) return true;
+            if (!!input[field] === false) return true
 
             // 特殊条件
             if (rule.indexOf(':') > 0) {
@@ -77,7 +77,7 @@ module.exports = function (ctx, rules, message = {}) {
                     break
             }
             return true
-        });
+        })
 
     }
 

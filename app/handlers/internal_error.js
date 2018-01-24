@@ -45,15 +45,15 @@ module.exports = async function(ctx,next) {
 		console.log(fields)
 		if(status === 500){
 			//报错在console
-			ctx.app.emit('error', e, this);
+			ctx.app.emit('error', e, this)
 			//写错误日志
-			logger.getLogger('error').error('error',fields);
+			logger.getLogger('error').error('error',fields)
 		}
 		else{
-			logger.getLogger('exception').warn('error',fields);
+			logger.getLogger('exception').warn('error',fields)
 		}
 		
 
 	}
-};
+}
 
