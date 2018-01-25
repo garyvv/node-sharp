@@ -39,6 +39,7 @@ module.exports = function (resource) {
 			}
 
 			if (session.uid == resourceUid) {
+				ctx.uid = resourceUid
 				return true
 			}
 
