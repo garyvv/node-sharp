@@ -11,8 +11,8 @@ const permissions = {
 	],
 }
 
-const db = require('../config/db.js')
-const redis = db.redis
+const Redis = require('./libraries/redis')
+const CacheKey = require('../config/cache_key')
 module.exports = function (resource) {
 
 	return async function (ctx, next) {
@@ -24,20 +24,22 @@ module.exports = function (resource) {
 		async function checkToken() {
 			let token = (typeof (ctx.request.headers.token) == 'undefined' || !ctx.request.headers.token) ?
 				ctx.cookies.get('token') : ctx.request.headers.token
-			let resourceUid = ctx.params.uid
+			let resourceUid = (typeof (ctx.request.headers.uid) == 'undefined' || !ctx.request.headers.uid) ?
+				ctx.cookies.get('uid') : ctx.request.headers.uid
 
 			if (!token || !resourceUid) {
 				return false
 			}
 
-			sessionKey = 'API:NODE:SESSION:' + token
-			session = await redis.get(sessionKey)
+			sessionKey = CacheKey.WECHAT_SESSION + token
+			session = await Redis.get(sessionKey)
 			session = JSON.parse(session)
 			if (!session) {
 				return false
 			}
 
 			if (session.uid == resourceUid) {
+				ctx.uid = resourceUid
 				return true
 			}
 
@@ -72,7 +74,7 @@ module.exports = function (resource) {
 			}
 		}
 
-		if (!isInPermissions) await reject(403);
+		if (!isInPermissions) await reject(403)
 	}
 
-};
+}

@@ -1,4 +1,4 @@
-var log4js = require('log4js');
+var log4js = require('log4js')
 log4js.configure({
     appenders: {
         //错误日志
@@ -39,6 +39,6 @@ log4js.configure({
     },
     pm2: true,
     disableClustering: true
-});
+})
 
 module.exports = log4js

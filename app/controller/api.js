@@ -8,7 +8,8 @@ module.exports = {
 
 		let rules = {
 			'uid': 'required|numeric|in:"0","3","4"',
-			'filter': 'required|in:1,2,3'
+			'filter': 'in:1,2,3',
+			'test': 'required'
 		}
 
 		let message = {
