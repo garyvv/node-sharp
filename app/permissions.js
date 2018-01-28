@@ -47,6 +47,7 @@ module.exports = function (resource) {
 		}
 
 		async function reject(code) {
+			this.code = 2001
 			if (code === 401) await ctx.throw(401, '需要登陆')
 			else if (code === 403) await ctx.throw(403, '权限不足')
 			else if (code === 412) await ctx.throw(412, '不满足请求条件')

@@ -11,7 +11,7 @@ module.exports = async function (ctx, next) {
 	}
 	else if (parseInt(ctx.status) === 403) {
 		ctx.body = {
-			code: 500,
+			code: !!this.code === true ? this.code : 500,
 			success: false,
 			data: [],
 			msg: '权限不足'
