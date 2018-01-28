@@ -9,21 +9,18 @@ module.exports = {
 		let images = [
 			{
 				'name': 'name',
-				'image': 'http://toy.garylv.com/image/cache/catalog/Banner/bianxingjingang-1140x380.jpg',
-				'target_id': 1,
-				'target': 'product',
+				'image': 'http://tools.miaoke.tech/images/card/bg1.png',
+				'template_id': 1,
 			},
 			{
 				'name': 'name',
-				'image': 'http://toy.garylv.com/image/cache/catalog/Banner/IMG_5545-1140x380.JPG',
-				'target_id': 1,
-				'target': 'product',
+				'image': 'http://tools.miaoke.tech/images/card/bg2.png',
+				'template_id': 2,
 			},
 			{
 				'name': 'name',
-				'image': 'http://toy.garylv.com/image/cache/catalog/Banner/IMG_5548-1140x380.JPG',
-				'target_id': 1,
-				'target': 'product',
+				'image': 'http://tools.miaoke.tech/images/card/bg3.png',
+				'template_id': 3,
 			},
 		];
 
