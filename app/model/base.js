@@ -1,4 +1,4 @@
-const DB = require('../../config/db')
+const DB = require('../libraries/db')
 var table
 
 module.exports = {

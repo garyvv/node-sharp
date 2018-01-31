@@ -1,7 +1,3 @@
-//role:public,private,protect
-//actions:get,post,put,delete
-//relations:role,owner
-
 const permissions = {
 	"guest": [
 		{ role: ['public'] }
@@ -12,7 +8,7 @@ const permissions = {
 }
 
 const Redis = require('./libraries/redis')
-const CacheKey = require('../config/cache_key')
+const Constant = require('./libraries/constant')
 module.exports = function (resource) {
 
 	return async function (ctx, next) {
@@ -31,7 +27,7 @@ module.exports = function (resource) {
 				return false
 			}
 
-			sessionKey = CacheKey.WECHAT_SESSION + token
+			sessionKey = Constant.WECHAT_SESSION + token
 			session = await Redis.get(sessionKey)
 			session = JSON.parse(session)
 			if (!session) {

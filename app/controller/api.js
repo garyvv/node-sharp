@@ -1,15 +1,17 @@
-const response = require('../util/response.js')
-const validate = require('../util/validate')
-const modelUser = require('../model/users')
+const Response = require('../util/response.js')
+const Validate = require('../util/validate')
+const ModelUser = require('../model/users')
+const Redis = require('../libraries/redis')
 
 module.exports = {
+	
+	test: async function (ctx) {
 
-	test: async function (ctx, next) {
-
+		console.log('controller input')
+		console.log(ctx.input)
 		let rules = {
-			'uid': 'required|numeric|in:"0","3","4"',
+			'uid': 'numeric|in:"0","3","4"',
 			'filter': 'in:1,2,3',
-			'test': 'required'
 		}
 
 		let message = {
@@ -18,7 +20,10 @@ module.exports = {
 			'uid.in': 'uid 必须在xxx范围内'
 		}
 
-		validate(ctx, rules, message)
+		Validate(ctx, rules, message)
+
+		Redis.set('testkey', JSON.stringify(message))
+		Redis.expire('testkey', 86400 * 30)
 
 		let insertData = [
 			{
@@ -39,12 +44,15 @@ module.exports = {
 			'description': 'test4'
 		}
 
-		// let data = await modelUser.addUser(insertData)
+		let realInsertData = {
+			'openid': 'test' + new Date().getTime()
+		}
+		// insertData = await ModelUser.addUser(realInsertData)
 
-		response.output(ctx, insertData)
+		Response.output(ctx, insertData)
 	},
 
-	edit: async function (ctx, next) {
+	edit: async function (ctx) {
 		console.log(ctx.params)
 		let updateData = {
 			'name': '更新',
@@ -60,9 +68,9 @@ module.exports = {
 			'description': ['test4', 'test3']
 		}
 
-		let data = await modelUser.editUser(updateData, where, notWhere)
+		let data = await ModelUser.editUser(updateData, where, notWhere)
 
-		response.output(ctx, data)
+		Response.output(ctx, data)
 	},
 
 }

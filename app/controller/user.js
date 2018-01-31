@@ -5,24 +5,24 @@ const General = require('../helpers/general')
 
 module.exports = {
 
-	detail: async function (ctx, next) {
+	detail: async function (ctx) {
 
 		let data = await ModelUser.getUser(ctx.uid)
 		Response.output(ctx, data)
 	},
 
-	edit: async function (ctx, next) {
+	edit: async function (ctx) {
 		console.log('--------- ctx-uid: --------' + ctx.uid)
-		console.log(ctx.request.body.nickname)
+		console.log(ctx.input.nickname)
 		let updateData = {}
-		if (!!ctx.request.body.nickname) updateData.nickname = ctx.request.body.nickname
-		if (!!ctx.request.body.gender) updateData.gender = ctx.request.body.gender
-		if (!!ctx.request.body.avatar) updateData.avatar = ctx.request.body.avatar
-		if (!!ctx.request.body.country) updateData.country = ctx.request.body.country
-		if (!!ctx.request.body.province) updateData.province = ctx.request.body.province
-		if (!!ctx.request.body.city) updateData.city = ctx.request.body.city
-		if (!!ctx.request.body.mobile) updateData.mobile = ctx.request.body.mobile
-		if (!!ctx.request.body.language) updateData.language = ctx.request.body.language
+		if (!!ctx.input.nickname) updateData.nickname = ctx.input.nickname
+		if (!!ctx.input.gender) updateData.gender = ctx.input.gender
+		if (!!ctx.input.avatar) updateData.avatar = ctx.input.avatar
+		if (!!ctx.input.country) updateData.country = ctx.input.country
+		if (!!ctx.input.province) updateData.province = ctx.input.province
+		if (!!ctx.input.city) updateData.city = ctx.input.city
+		if (!!ctx.input.mobile) updateData.mobile = ctx.input.mobile
+		if (!!ctx.input.language) updateData.language = ctx.input.language
 
 		let where = {
 			'id': ctx.uid,
