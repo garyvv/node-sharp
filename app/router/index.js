@@ -6,7 +6,7 @@ module.exports = function() {
     Router.prefix('/api/v1')
 
     Router.get('/test/:sss/hh/:hhh', Permissions('guest'), Api.test)
-    // Router.get('/test', Permissions('guest'), Api.test)
+    Router.get('/test', Permissions('guest'), Api.test)
     Router.get('/edit', Permissions('guest'), Api.edit)
     Router.get('/test/:test', Permissions('user'), Api.test)
     

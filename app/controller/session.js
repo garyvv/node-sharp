@@ -11,7 +11,7 @@ module.exports = {
 
 	login: async function (ctx) {
 
-		Validate(ctx.input, {
+		Validate(ctx, {
 			'code': 'required',
 		})
 
