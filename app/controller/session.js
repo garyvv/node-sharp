@@ -11,13 +11,13 @@ module.exports = {
 
 	login: async function (ctx) {
 
-		Validate(ctx, {
+		Validate(ctx.input, {
 			'code': 'required',
 		})
 
 		let appId = WechatMina.app_id
 		let appSecret = WechatMina.app_secret
-		code = ctx.request.body.code
+		code = ctx.input.code
 
 		let url = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appId + '&secret=' + appSecret + '&js_code=' + code + '&grant_type=authorization_code'
 
@@ -60,10 +60,9 @@ module.exports = {
 				'uid': uid
 			}
 
-			Response.output(ctx, data)
+			return Response.output(ctx, data)
 		} else {
-			this.message = 'code 错误'
-			ctx.throw(500)
+			return Response.fail(ctx, 'code 错误')
 		}
 
 

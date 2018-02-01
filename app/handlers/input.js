@@ -13,6 +13,10 @@ module.exports = async function (ctx, next) {
             break
     }
 
+    if (!!ctx.header.bundle_id === false) ctx.header.bundle_id = ''
+    if (!!ctx.header.device === false) ctx.header.device = ''
+    if (!!ctx.header.version === false) ctx.header.version = ''
+
     await next()
 }
 
