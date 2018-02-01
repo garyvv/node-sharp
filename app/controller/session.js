@@ -3,13 +3,13 @@ const Validate = require('../util/validate')
 const ModelUser = require('../model/users')
 const WechatMina = require('../../config/wechat_mina')
 const Request = require('request')
-const CacheKey = require('../../config/cache_key')
+const Constant = require('../libraries/constant')
 const Redis = require('../libraries/redis')
 const Crypto = require('crypto')
 
 module.exports = {
 
-	login: async function (ctx, next) {
+	login: async function (ctx) {
 
 		Validate(ctx, {
 			'code': 'required',
@@ -47,7 +47,7 @@ module.exports = {
 			let salt = 'OPENID:' + result.openid + ':CARD-LOGIN:' + new Date().getTime()
 			let token = Crypto.createHash('md5').update(salt).digest('hex').toUpperCase()
 
-			let ckey = CacheKey.WECHAT_SESSION + token
+			let ckey = Constant.WECHAT_SESSION + token
 			let cacheData = {
 				'open_id': result.openid,
 				'uid': uid,

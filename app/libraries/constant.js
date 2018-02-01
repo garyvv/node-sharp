@@ -1,5 +1,5 @@
-var cacheKey = {
+var constant = {
   "WECHAT_SESSION": "NS:API:WECHAT_SESSION:",
 }
 
-module.exports = cacheKey
+module.exports = constant

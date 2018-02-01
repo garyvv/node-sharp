@@ -1,11 +1,13 @@
-const compose = require ('koa-compose')
+const Compose = require ('koa-compose')
 
-const httpError = require('./http_error')
-const internalError = require('./internal_error')
+const HttpError = require('./http_error')
+const InternalError = require('./internal_error')
+const Input = require('./input')
 
 
-module.exports = compose([
-	httpError,
-	internalError
+module.exports = Compose([
+	HttpError,
+	InternalError,
+	Input
 ])
 

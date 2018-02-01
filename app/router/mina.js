@@ -1,16 +1,21 @@
-var Session = require('../controller/session')
-var User = require('../controller/user')
-var Template = require('../controller/template')
-var Recommand = require('../controller/recommand')
-var Permissions = require('../permissions')
+const Router = require('koa-router')()
 
-module.exports = function(router) {
-    router.post('/api/mina/v1/login', Permissions('guest'), Session.login)
-    router.get('/api/mina/v1/rcmd', Permissions('guest'), Recommand.list)
+const Session = require('../controller/session')
+const User = require('../controller/user')
+const Template = require('../controller/template')
+const Recommand = require('../controller/recommand')
+const Permissions = require('../permissions')
 
-    router.get('/api/mina/v1/users', Permissions('user'), User.detail)
-    router.put('/api/mina/v1/users', Permissions('user'), User.edit)
+module.exports = function() {
+    Router.prefix('/api/mina/v1')
 
-    router.get('/api/mina/v1/templates/:templateId', Permissions('guest'), Template.detail)
+    Router.post('/login', Permissions('guest'), Session.login)
+    Router.get('/rcmd', Permissions('guest'), Recommand.list)
 
+    Router.get('/users', Permissions('user'), User.detail)
+    Router.put('/users', Permissions('user'), User.edit)
+
+    Router.get('/templates/:templateId', Permissions('guest'), Template.detail)
+
+    return Router
 }

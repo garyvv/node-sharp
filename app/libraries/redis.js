@@ -1,20 +1,18 @@
-const config = require('../../config/config.js')
-
-const ioredis = require('ioredis')
-
-const logger = require('../handlers/logger.js')
+const Config = require('../../config/config')
+const Ioredis = require('ioredis')
+const Logger = require('../handlers/logger')
 
 //redis单例
-class redis{
-  constructor(){
+class Redis {
+  constructor() {
 
-    this.redis = new ioredis(config.redis)
-    logger.getLogger('system').trace('redis init')
+    this.redis = new Ioredis(Config.redis)
+    Logger.getLogger('system').trace('redis init')
     this.redis.on('error', function (err) {
-      logger.getLogger('system').error('redis fail',err)
+      Logger.getLogger('system').error('redis fail', err)
     })
-  
+
   }
 }
 
-module.exports = new redis().redis
+module.exports = new Redis().redis

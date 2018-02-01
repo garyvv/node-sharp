@@ -4,7 +4,7 @@ const General = require('../helpers/general')
 
 module.exports = {
 
-	list: async function (ctx, next) {
+	list: async function (ctx) {
 
 		let images = [
 			{

@@ -4,7 +4,7 @@ const General = require('../helpers/general')
 
 module.exports = {
 
-	detail: async function (ctx, next) {
+	detail: async function (ctx) {
 		let templateId = ctx.params.templateId
 
 		let templateInfo = {

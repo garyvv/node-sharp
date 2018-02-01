@@ -1,4 +1,4 @@
-const DB = require('../../config/db')
+const DB = require('../libraries/db')
 const ModelBase = require('./base')
 
 let table = 'fc_users'
