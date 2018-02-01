@@ -1,5 +1,5 @@
-const Response = require('../util/response.js')
-const Validate = require('../util/validate.js')
+const Response = require('../util/response')
+const Validate = require('../util/validate')
 const General = require('../helpers/general')
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
 			},
 		];
 
-		Response.output(ctx, images)
+		return Response.output(ctx, images)
 	},
 
 

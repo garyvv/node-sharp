@@ -1,18 +1,8 @@
+const Response = require('../util/response')
+
 module.exports = function (ctx, rules, message = {}) {
     let msgKey
-    let method = ctx.method
-    let input = {}
-    switch (method) {
-        case 'GET':
-            input = ctx.query
-            break
-        case 'PUT':
-        case 'POST':
-            input = ctx.request.body
-            break
-        default:
-            break
-    }
+    let input = ctx.input
 
     for (let field in rules) {
 
@@ -22,8 +12,8 @@ module.exports = function (ctx, rules, message = {}) {
 
             if (rule === 'required') {
                 if (!!input[field] === false) {
-                    this.message = !!message[msgKey] === true ? message[msgKey] : field + ' 不能为空'
-                    ctx.throw(500)
+                    let message = !!message[msgKey] === true ? message[msgKey] : field + ' 不能为空'
+                    return Response.fail(ctx, message)
                 }
                 return true
             }
@@ -41,8 +31,8 @@ module.exports = function (ctx, rules, message = {}) {
                         // 数组
                         if (ruleData instanceof Array === true) {
                             if (ruleData.hasOwnProperty(input[field]) === false) {
-                                this.message = !!message[msgKey] === true ? message[msgKey] : field + ' 非法'
-                                ctx.throw(500)
+                                let message = !!message[msgKey] === true ? message[msgKey] : field + ' 非法'
+                                return Response.fail(ctx, message)
                             }
                         }
                         break
@@ -54,9 +44,8 @@ module.exports = function (ctx, rules, message = {}) {
                         break
                     default:
                         console.log('error “：” rule: ' + rule)
-                        this.message = '参数验证详细规则错误'
-                        ctx.throw(500)
-                        break
+                        let message = '参数验证详细规则错误'
+                        return Response.fail(ctx, message)
                         break
                 }
                 return true
@@ -66,14 +55,14 @@ module.exports = function (ctx, rules, message = {}) {
             switch (rule) {
                 case 'numeric':
                     if (isNaN(input[field]) === true) {
-                        this.message = !!message[msgKey] === true ? message[msgKey] : field + ' 必须为数字'
-                        ctx.throw(500)
+                        let message = !!message[msgKey] === true ? message[msgKey] : field + ' 必须为数字'
+                        return Response.fail(ctx, message)
                     }
                     break
                 default:
                     console.log('error rule: ' + rule)
-                    this.message = '参数验证规则错误'
-                    ctx.throw(500)
+                    let message = '参数验证规则错误'
+                    return Response.fail(ctx, message)
                     break
             }
             return true

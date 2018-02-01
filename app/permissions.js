@@ -9,6 +9,7 @@ const permissions = {
 
 const Redis = require('./libraries/redis')
 const Constant = require('./libraries/constant')
+const Response = require('./util/response')
 module.exports = function (resource) {
 
 	return async function (ctx, next) {
@@ -43,10 +44,10 @@ module.exports = function (resource) {
 		}
 
 		async function reject(code) {
-			this.code = 2001
-			if (code === 401) await ctx.throw(401, '需要登陆')
-			else if (code === 403) await ctx.throw(403, '权限不足')
-			else if (code === 412) await ctx.throw(412, '不满足请求条件')
+			let repCode = 2001
+			if (code === 401) return await Response.fail(ctx, '需要登陆', repCode)
+			else if (code === 403) return await Response.fail(ctx, '权限不足', repCode)
+			else if (code === 412) return await Response.fail(ctx, '不满足请求条件', repCode)
 		}
 
 		let permission = permissions[resource]

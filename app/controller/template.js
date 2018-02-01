@@ -1,5 +1,5 @@
-const Response = require('../util/response.js')
-const Validate = require('../util/validate.js')
+const Response = require('../util/response')
+const Validate = require('../util/validate')
 const General = require('../helpers/general')
 
 module.exports = {
@@ -50,11 +50,11 @@ module.exports = {
 				}
 				break
 			default:
-				ctx.throw('error template id')
+				return Response.fail(ctx, 'error template id')
 				break
 		}
 
-		Response.output(ctx, templateInfo)
+		return Response.output(ctx, templateInfo)
 	},
 
 

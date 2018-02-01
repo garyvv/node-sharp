@@ -1,4 +1,4 @@
-const Response = require('../util/response.js')
+const Response = require('../util/response')
 const Validate = require('../util/validate')
 const ModelUser = require('../model/users')
 const Redis = require('../libraries/redis')
@@ -9,6 +9,7 @@ module.exports = {
 
 		console.log('controller input')
 		console.log(ctx.input)
+		console.log(ctx.params)
 		let rules = {
 			'uid': 'numeric|in:"0","3","4"',
 			'filter': 'in:1,2,3',
@@ -49,7 +50,7 @@ module.exports = {
 		}
 		// insertData = await ModelUser.addUser(realInsertData)
 
-		Response.output(ctx, insertData)
+		return Response.output(ctx, insertData)
 	},
 
 	edit: async function (ctx) {
@@ -70,7 +71,7 @@ module.exports = {
 
 		let data = await ModelUser.editUser(updateData, where, notWhere)
 
-		Response.output(ctx, data)
+		return Response.output(ctx, data)
 	},
 
 }

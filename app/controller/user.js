@@ -1,5 +1,5 @@
-const Response = require('../util/response.js')
-const Validate = require('../util/validate.js')
+const Response = require('../util/response')
+const Validate = require('../util/validate')
 const ModelUser = require('../model/users')
 const General = require('../helpers/general')
 
@@ -8,7 +8,7 @@ module.exports = {
 	detail: async function (ctx) {
 
 		let data = await ModelUser.getUser(ctx.uid)
-		Response.output(ctx, data)
+		return Response.output(ctx, data)
 	},
 
 	edit: async function (ctx) {
@@ -29,11 +29,10 @@ module.exports = {
 		}
 
 		if (await General.isEmpty(updateData)) {
-			this.message = '更新内容不能为空'
-			ctx.throw(500)
+			return Response.fail(ctx, '更新内容不能为空')
 		} else {
 			let data = await ModelUser.editUser(updateData, where)
-			Response.output(ctx, {})
+			return Response.output(ctx, {})
 		}
 
 	}
