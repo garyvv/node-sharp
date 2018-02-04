@@ -1,15 +1,35 @@
 const Response = require('../util/response')
 const Validate = require('../util/validate')
+const Uuid = require('../util/uuid')
 const ModelUser = require('../model/users')
 const Redis = require('../libraries/redis')
 
 module.exports = {
-	
+
 	test: async function (ctx) {
 
 		console.log('controller input')
 		console.log(ctx.input)
 		console.log(ctx.params)
+
+		let conflict = []
+		let tmpNo = 'none'
+		let orderNo = []
+		for (let index = 0; index < 10000; index++) {
+			let genNo = await Uuid.genOrderNo()
+			orderNo[index] = genNo
+			if (genNo === tmpNo) {
+				conflict.push(genNo)
+			}
+			tmpNo = genNo
+		}
+		orderNo.reverse()
+
+		let orderResult = {
+			"conflict": conflict,
+			// "order": orderNo
+		}
+
 		let rules = {
 			'uid': 'numeric|in:"0","3","4"',
 			'filter': 'in:1,2,3',
@@ -28,9 +48,9 @@ module.exports = {
 
 		let insertData = [
 			{
-				'name': 'test',
+				'name': 'te',
 				'user_id': 1,
-				'description': 'test'
+				'description': 'uni * 2'
 			},
 			{
 				'name': 'test2',
@@ -50,7 +70,7 @@ module.exports = {
 		}
 		// insertData = await ModelUser.addUser(realInsertData)
 
-		return Response.output(ctx, insertData)
+		return Response.output(ctx, orderResult)
 	},
 
 	edit: async function (ctx) {
