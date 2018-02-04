@@ -15,7 +15,7 @@ module.exports = {
 		let conflict = []
 		let tmpNo = 'none'
 		let orderNo = []
-		for (let index = 0; index < 10000; index++) {
+		for (let index = 0; index < 100; index++) {
 			let genNo = await Uuid.genOrderNo()
 			orderNo[index] = genNo
 			if (genNo === tmpNo) {
@@ -27,7 +27,7 @@ module.exports = {
 
 		let orderResult = {
 			"conflict": conflict,
-			// "order": orderNo
+			"order": orderNo
 		}
 
 		let rules = {

@@ -22,7 +22,7 @@ module.exports = {
 				'image': 'http://tools.miaoke.tech/images/card/bg3.png',
 				'template_id': 3,
 			},
-		];
+		]
 
 		return Response.output(ctx, images)
 	},
