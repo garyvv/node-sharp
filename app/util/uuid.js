@@ -1,4 +1,5 @@
 const MULTIPLY_BASE = 1000
+var General = require('../helpers/general')
 
 module.exports = {
 
@@ -20,10 +21,8 @@ module.exports = {
   /* 在部署集群时需要修改不同机器的这个编号。范围1-15 */
   // 生成订单号
   genOrderNo: async function () {
-    let date = new Date()
-    let today = date.getFullYear() + (date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
-		
-    return today + await this.uniqueIdOfToday(1);//AppConfig:: getInstance() -> get('server_id')
+
+    return await General.today() + await this.uniqueIdOfToday(1)//AppConfig:: getInstance() -> get('server_id')
   },
 
 }
