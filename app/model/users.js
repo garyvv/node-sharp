@@ -9,28 +9,24 @@ module.exports = {
 
 	getUserByOpenId: async function (openid) {
 
-		let user = new Promise((resolve, reject) => {
-			DB.read_mysql.query('select * from fc_users where openid = ?', openid).then(function (rows) {
-				resolve(rows[0])
-			}).catch(function (error) {
-				console.log(error)
-				reject(error)
-			})
-		})
+		let user = DB.readMysql.first(
+			'*'
+		)
+			.from(table)
+			.where('openid', openid)
+
 		return await user
 
 	},
 
 	getUser: async function (uid) {
 
-		let user = new Promise((resolve, reject) => {
-			DB.read_mysql.query('select * from fc_users where id = ?', uid).then(function (rows) {
-				resolve(rows[0])
-			}).catch(function (error) {
-				console.log(error)
-				reject(error)
-			})
-		})
+		let user = DB.readMysql.first(
+			'*'
+		)
+			.from(table)
+			.where('id', uid)
+
 		return await user
 
 	},

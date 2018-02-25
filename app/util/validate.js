@@ -1,19 +1,19 @@
-const Response = require('../util/response')
+const ApiError = require('../util/api_error')
+const Constant = require('../libraries/constant')
 
 module.exports = function (ctx, rules, message = {}) {
     let msgKey
     let input = ctx.input
 
     for (let field in rules) {
-
         rules[field].split('|').forEach(rule => {
             // 普通的message key名称
             msgKey = field + '.' + rule
 
             if (rule === 'required') {
                 if (!!input[field] === false) {
-                    let message = !!message[msgKey] === true ? message[msgKey] : field + ' 不能为空'
-                    return Response.fail(ctx, message)
+                    let msg = !!message[msgKey] === true ? message[msgKey] : field + ' 不能为空'
+                    throw new ApiError('validate.error', msg)
                 }
                 return true
             }
@@ -30,10 +30,13 @@ module.exports = function (ctx, rules, message = {}) {
                         let ruleData = checkRule[1].split(',')
                         // 数组
                         if (ruleData instanceof Array === true) {
-                            if (ruleData.hasOwnProperty(input[field]) === false) {
-                                let message = !!message[msgKey] === true ? message[msgKey] : field + ' 非法'
-                                return Response.fail(ctx, message)
+                            if (ruleData.indexOf(input[field]) === -1) {
+                                let msg = !!message[msgKey] === true ? message[msgKey] : field + ' 非法'
+                                throw new ApiError('validate.error', msg)
                             }
+                        } else {
+                            let msg = '规则设置错误'
+                            throw new ApiError('validate.error', msg)
                         }
                         break
                     case 'min':
@@ -44,8 +47,8 @@ module.exports = function (ctx, rules, message = {}) {
                         break
                     default:
                         console.log('error “：” rule: ' + rule)
-                        let message = '参数验证详细规则错误'
-                        return Response.fail(ctx, message)
+                        let msg = '参数验证详细规则错误'
+                        throw new ApiError('validate.error', msg)
                         break
                 }
                 return true
@@ -55,14 +58,14 @@ module.exports = function (ctx, rules, message = {}) {
             switch (rule) {
                 case 'numeric':
                     if (isNaN(input[field]) === true) {
-                        let message = !!message[msgKey] === true ? message[msgKey] : field + ' 必须为数字'
-                        return Response.fail(ctx, message)
+                        let msg = !!message[msgKey] === true ? message[msgKey] : field + ' 必须为数字'
+                        throw new ApiError('validate.error', msg)
                     }
                     break
                 default:
                     console.log('error rule: ' + rule)
-                    let message = '参数验证规则错误'
-                    return Response.fail(ctx, message)
+                    let msg = '参数验证规则错误'
+                    throw new ApiError('validate.error', msg)
                     break
             }
             return true

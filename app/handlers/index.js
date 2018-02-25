@@ -5,8 +5,8 @@ const InternalError = require('./internal_error')
 const Input = require('./input')
 
 module.exports = Compose([
-	HttpError,
+	Input,
 	InternalError,
-	Input
+	HttpError
 ])
 

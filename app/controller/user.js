@@ -2,6 +2,7 @@ const Response = require('../util/response')
 const Validate = require('../util/validate')
 const ModelUser = require('../model/users')
 const General = require('../helpers/general')
+const ApiError = require('../util/api_error')
 
 module.exports = {
 
@@ -29,7 +30,7 @@ module.exports = {
 		}
 
 		if (await General.isEmpty(updateData)) {
-			return Response.fail(ctx, '更新内容不能为空')
+			throw new ApiError('common.paramsEmpty', '更新内容')
 		} else {
 			let data = await ModelUser.editUser(updateData, where)
 			return Response.output(ctx, {})

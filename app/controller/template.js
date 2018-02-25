@@ -1,6 +1,7 @@
 const Response = require('../util/response')
 const Validate = require('../util/validate')
 const General = require('../helpers/general')
+const ApiError = require('../util/api_error')
 
 module.exports = {
 
@@ -50,7 +51,7 @@ module.exports = {
 				}
 				break
 			default:
-				return Response.fail(ctx, 'error template id')
+			throw new ApiError('common.notExist', '模板ID')
 				break
 		}
 
