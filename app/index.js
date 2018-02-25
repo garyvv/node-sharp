@@ -3,9 +3,9 @@ const app = new Koa()
 const Config = require('../config/config')
 const koaBody = require('koa-body')
 
-app.use(require('./handlers'))
-
 app.use(koaBody())
+
+app.use(require('./handlers'))
 
 // 应用路由
 var appRouter = require('./router/index')()

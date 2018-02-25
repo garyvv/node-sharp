@@ -6,6 +6,7 @@ const Request = require('request')
 const Constant = require('../libraries/constant')
 const Redis = require('../libraries/redis')
 const Crypto = require('crypto')
+const ApiError = require('../util/api_error')
 
 module.exports = {
 
@@ -62,7 +63,7 @@ module.exports = {
 
 			return Response.output(ctx, data)
 		} else {
-			return Response.fail(ctx, 'code 错误')
+			throw new ApiError('auth.error', 'no permission')
 		}
 
 

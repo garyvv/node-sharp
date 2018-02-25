@@ -1,16 +1,34 @@
 const Config = require('../../config/config')
-const PromiseMysql = require('promise-mysql')
+const Knex = require('knex')
 const Logger = require('../handlers/logger')
 
 //db单例
-class DB{
-  constructor(){
+class DB {
+  constructor() {
 
-    this.read_mysql = PromiseMysql.createPool(Config.read_mysql)
-    Logger.getLogger('system').trace('read_mysql init')
+    this.readMysql = Knex({
+      client: 'mysql',
+      connection: {
+        host: Config.read_mysql.host,
+        user: Config.read_mysql.user,
+        password: Config.read_mysql.password,
+        database: Config.read_mysql.database
+      },
+      pool: { min: Config.read_mysql.minConnection, max: Config.read_mysql.maxConnection }
+    })
+    Logger.getLogger('system').trace('readMysql init')
 
-    this.write_mysql = PromiseMysql.createPool(Config.write_mysql)
-    Logger.getLogger('system').trace('write_mysql init')
+    this.writeMysql = Knex({
+      client: 'mysql',
+      connection: {
+        host: Config.write_mysql.host,
+        user: Config.write_mysql.user,
+        password: Config.write_mysql.password,
+        database: Config.write_mysql.database
+      },
+      pool: { min: Config.write_mysql.minConnection, max: Config.write_mysql.maxConnection }
+    });
+    Logger.getLogger('system').trace('writeMysql init')
 
   }
 }

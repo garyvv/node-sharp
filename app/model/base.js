@@ -1,10 +1,27 @@
 const DB = require('../libraries/db')
+const ApiError = require('../util/api_error')
+
 var table
+const COMMON_STATUS_NORMAL = 1
+const COMMON_STATUS_OFFLINE = 0
 
 module.exports = {
 
+	statusNormal() { return COMMON_STATUS_NORMAL },
+	statusOffline() { return COMMON_STATUS_NORMAL },
+
 	setTable(t) {
 		table = t
+	},
+
+	query: async function (sql, data, link = 'plat') {
+		return await DB.readMysql.raw(sql, ...data).then(function (resp) {
+			if (!!resp[0]) return resp[0]
+			else return []
+		}).catch(function (error) {
+			console.log(error)
+			throw new ApiError('db.queryError')
+		})
 	},
 
 	execInsert: async function (data, mode = false, link = 'plat') {
@@ -64,13 +81,12 @@ module.exports = {
 			}
 		})
 
-		let result = new Promise((resolve, reject) => {
-			DB.read_mysql.query(sql, finalData).then(function (res) {
-				resolve(res)
-			}).catch(function (error) {
-				console.log(error)
-				reject(error)
-			})
+		let result = DB.writeMysql.raw(sql, finalData).then(function (resp) {
+			if (!!resp[0]) return resp[0]
+			else return resp
+		}).catch(function (error) {
+			console.log(error)
+			throw new ApiError('db.insertError')
 		})
 
 		return await result
@@ -132,13 +148,12 @@ module.exports = {
 
 		let sql = 'UPDATE `' + table + '` SET ' + setSql + ' WHERE ' + whereSql + notWhereSql
 
-		let result = new Promise((resolve, reject) => {
-			DB.read_mysql.query(sql, prepareData).then(function (res) {
-				resolve(res)
-			}).catch(function (error) {
-				console.log(error)
-				reject(error)
-			})
+		let result = DB.writeMysql.raw(sql, prepareData).then(function (resp) {
+			if (!!resp[0]) return resp[0]
+			else return []
+		}).catch(function (error) {
+			console.log(error)
+			throw new ApiError('db.updateError')
 		})
 
 		return await result
