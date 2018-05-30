@@ -1,0 +1,12 @@
+{
+    "apps": [{
+        "name": "NodeSharp",
+        "script": "./app/index.js",
+        "watch": true,
+        "ignore_watch": [
+            "node_modules",
+            "logs",
+            "doc"
+        ]
+    }]
+}
