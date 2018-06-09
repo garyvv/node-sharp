@@ -2,7 +2,6 @@ const DB = require('../libraries/db')
 const ModelBase = require('./base')
 
 let table = 'fc_users'
-ModelBase.setTable(table)
 
 
 module.exports = {
@@ -32,13 +31,13 @@ module.exports = {
 	},
 
 	addUser: async function (data) {
-		let result = await ModelBase.execInsert(data)
+		let result = await ModelBase.execInsert(table, data)
 
 		return await result
 	},
 
 	editUser: async function (data, where, notWhere = {}) {
-		let result = await ModelBase.execUpdate(data, where, notWhere)
+		let result = await ModelBase.execUpdate(table, data, where, notWhere)
 
 		return await result
 	}
