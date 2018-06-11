@@ -13,13 +13,17 @@ module.exports = {
         let userInfo = await ModelCustomer.getCustomerByOpenId(result.openid)
 
         let uid
+        let defaultStore = 0
         if (!userInfo) {
             let insertData = {
                 'openid': result.openid
             }
             insertRes = await ModelCustomer.add(insertData)
             uid = insertRes.insertId
-        } else uid = userInfo.id
+        } else {
+            uid = userInfo.id
+            defaultStore = userInfo.default_store
+        }
 
         let salt = 'OPENID:' + result.openid + ':CATERING-LOGIN:' + new Date().getTime()
         let token = Crypto.createHash('md5').update(salt).digest('hex').toUpperCase()
@@ -34,7 +38,8 @@ module.exports = {
 
         let data = {
             'token': token,
-            'uid': uid
+            'uid': uid,
+            'default_store': defaultStore
         }
 
         return data

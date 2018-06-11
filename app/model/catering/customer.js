@@ -1,9 +1,9 @@
 const DB = require('../../libraries/db')
-const config = require('../../../config/config');
-const ModelBase = require('../../model/base');
+const config = require('../../../config/config')
+const ModelBase = require('../../model/base')
 const ApiError = require('../../util/api_error')
 
-const table = 'mist_customer';
+const table = 'mist_customer'
 
 module.exports = {
     add: async function (data) {
