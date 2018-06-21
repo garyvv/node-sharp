@@ -29,7 +29,7 @@ module.exports = {
 			'*'
 		)
 			.from(table)
-			.where('id', uid)
+			.where('id', customerId)
 
 		return await user
 
