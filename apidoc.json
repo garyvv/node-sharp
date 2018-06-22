@@ -6,11 +6,11 @@
   "url": "https://garylv.com",
   "header": {
     "title": "node-sharp",
-    "filename": "header.md"
+    "filename": "apidoc-header.md"
   },
   "footer": {
     "title": "Copyright Garyvv",
-    "filename": "footer.md"
+    "filename": "apidoc-footer.md"
   },
   "template": {
     "withCompare": true,
