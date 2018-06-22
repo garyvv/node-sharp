@@ -14,9 +14,9 @@ module.exports = {
 
 	edit: async function (ctx) {
 		let updateData = {}
-		if (!!ctx.input.nickname) updateData.nickname = ctx.input.nickname
+		if (!!ctx.input.nickName) updateData.nickname = ctx.input.nickName
 		if (!!ctx.input.gender) updateData.gender = ctx.input.gender
-		if (!!ctx.input.avatar) updateData.avatar = ctx.input.avatar
+		if (!!ctx.input.avatarUrl) updateData.avatar = ctx.input.avatarUrl
 		if (!!ctx.input.country) updateData.country = ctx.input.country
 		if (!!ctx.input.province) updateData.province = ctx.input.province
 		if (!!ctx.input.city) updateData.city = ctx.input.city

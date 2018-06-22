@@ -12,7 +12,9 @@ class DB {
           host: Config.read_mysql.host,
           user: Config.read_mysql.user,
           password: Config.read_mysql.password,
-          database: Config.read_mysql.database
+          database: Config.read_mysql.database,
+          charset: 'utf8mb4',
+          collation: 'utf8mb4_unicode_ci'
         },
         pool: { min: Config.read_mysql.minConnection, max: Config.read_mysql.maxConnection }
       })
@@ -24,7 +26,9 @@ class DB {
           host: Config.write_mysql.host,
           user: Config.write_mysql.user,
           password: Config.write_mysql.password,
-          database: Config.write_mysql.database
+          database: Config.write_mysql.database,
+          charset: 'utf8mb4',
+          collation: 'utf8mb4_unicode_ci'
         },
         pool: { min: Config.write_mysql.minConnection, max: Config.write_mysql.maxConnection }
       })
