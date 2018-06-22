@@ -1,12 +1,20 @@
 {
   "name": "node-sharp api",
   "version": "1.0.1",
-  "description": "node-sharpapi",
-  "title": "node-sharpapi",
-  "url": "http://sharp.miaoke.tech",
+  "description": "node-sharp api",
+  "title": "node-sharp api",
+  "url": "https://garylv.com",
+  "header": {
+    "title": "node-sharp",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "Copyright Garyvv",
+    "filename": "footer.md"
+  },
   "template": {
     "withCompare": true,
     "withGenerator": true
   },
-  "sampleUrl": "http://sharp.miaoke.tech"
+  "sampleUrl": "https://garylv.com"
 }
