@@ -1,0 +1,1 @@
+Copyright © 2014 - 2018 [www.garylv.com](https://www.garylv.com/) All Rights Reserved
