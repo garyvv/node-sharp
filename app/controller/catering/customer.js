@@ -1,8 +1,12 @@
 const Response = require('../../util/response')
 const Validate = require('request-validate')
 const ModelCustomer = require('../../model/catering/customer')
+const ModelSeller = require('../../model/catering/seller')
 const ApiError = require('../../util/api_error')
 const _ = require('underscore')
+const OssSdk = require('../../libraries/ossSdk')
+const ConfigOss = require('../../../config/oss')
+const Uuid = require('../../libraries/uuid')
 
 module.exports = {
 
@@ -68,6 +72,95 @@ module.exports = {
 			return Response.output(ctx, {})
 		}
 
+	},
+
+	/**
+     * @api {post} /api/catering/v1/customer/:customerId/seller 申请成为商家
+	 * @apiVersion 1.0.0
+     * @apiGroup customer
+     * @apiPermission user
+	 * 
+	 * @apiDescription 普通用户申请开店
+	 * 
+     * @apiParam {String} company 店铺名称
+     * @apiParam {String} avatar 店铺头像
+     * @apiParam {String} tel 店铺联系电话
+     * @apiParam {String} address 店铺地址
+     * @apiParam {String} license 店铺营业执照路径
+	 * 
+	 * @apiSuccess {String} data response data
+	 * 
+     * @apiSuccessExample {json} Visual Preview:
+		{
+			"code": 200,
+			"message": "请求成功",
+			"data": {}
+		}
+	 * @apiSampleRequest https://garylv.com/api/catering/v1/customers/:customerId/sellers
+     */
+	applySeller: async function (ctx) {
+		Validate(ctx.input, {
+			company: 'required',
+			avatar: 'required',
+			tel: 'required',
+			address: 'required',
+			license: 'required',
+		})
+
+		let check = await ModelSeller.getByCustomerId(ctx.uid)
+		if (check) {
+			let updateData = {
+				company: ctx.input.company,
+				avatar: ctx.input.avatar,
+				tel: ctx.input.tel,
+				address: ctx.input.address,
+				license: ctx.input.license,
+			}
+			await ModelSeller.edit(updateData, {customer_id: ctx.uid})
+			updateData.customer_id = ctx.uid
+			updateData.id = check.id
+			return Response.output(ctx, updateData)
+		}
+
+		let insertData = {
+			customer_id: ctx.uid,
+			company: ctx.input.company,
+			avatar: ctx.input.avatar,
+			tel: ctx.input.tel,
+			address: ctx.input.address,
+			license: ctx.input.license,
+		}
+
+		let data = await ModelSeller.add(insertData)
+		insertData.id = data.insertId
+		return Response.output(ctx, insertData)
+
+	},
+
+	oss: async function (ctx) {
+		console.log('inputttttttttttttt')
+		console.log(ctx.input)
+		console.log(ctx.input.files.content)
+		console.log(ctx.input.files.content.path)
+
+		let files = ctx.input.files.content
+		let postData = ctx.input.fields
+
+		Validate(postData, {
+			folder: 'required'
+		})
+
+		let ossSdk = new OssSdk(ConfigOss.catering)
+		let fileType = files.type.split('/').pop()
+		let object = 'customer/' + ctx.uid + '/' + postData.folder + '/' +  await Uuid.genOrderNo() + '.' + fileType
+		await ossSdk.uploadFile(object, files.path)
+
+		let resp = {
+			'object': object,
+			'url': ConfigOss.catering.view_server + object
+		}
+
+		return Response.output(ctx, resp)
 	}
 
 }
