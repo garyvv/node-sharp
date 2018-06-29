@@ -2,12 +2,13 @@ const _ = require('underscore')
 const ApiError = require('../api_error')
 const Request = require('request')
 const WXBizDataCrypt = require('./WXBizDataCrypt.js')
+const Redis = require('../../libraries/redis')
 
 // 可配置的
 const WECHAT_CONFIG = ['mina', 'catering']
 
 class WeChatSDK {
-    
+
     constructor(config) {
         if (_.indexOf(WECHAT_CONFIG, config) === -1) throw new ApiError('wechat.configNotExist')
         try {
@@ -17,23 +18,73 @@ class WeChatSDK {
         }
     }
 
+    async get(url) {
+        let result = await new Promise((resolve, reject) => {
+            Request(url, function (err, response, body) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(JSON.parse(body.toString()))
+            })
+        })
+        return result
+    }
+
+    async post(url, data, headers = [{name: 'Content-Type', value: 'application/json'}]) {
+        let options = {
+            url: url,
+            headers: headers,
+            method: 'POST',
+            form:  JSON.stringify(data)
+        }
+        let result = await new Promise((resolve, reject) => {
+            Request(options, function (err, response, body) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(JSON.parse(body.toString()))
+            })
+        })
+        return result
+    }
+
+    async getAccessToken(refresh = false) {
+        let cacheKey = 'NS:API:WECHAT:ACCESS_TOKEN'
+        
+        if (refresh === false) {
+            let cacheData = await Redis.get(cacheKey)
+            if (cacheData) return cacheData
+        }
+
+        let url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' + this.config.app_id + '&secret=' + this.config.app_secret 
+
+        let result = await this.get(url)
+        console.log(result)
+        if (result && _.has(result, 'access_token')) {
+            Redis.set(cacheKey, result.access_token, 'EX', 7200 - 300)
+            return result.access_token
+        }
+
+        return ''
+    }
+
     async minaLogin(code) {
         console.log(this.config)
         let url = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + this.config.app_id + '&secret=' + this.config.app_secret + '&js_code=' + code + '&grant_type=authorization_code'
 
-		let result = await new Promise((resolve, reject) => {
-			Request(url, function (err, response, body) {
-				if (err) {
-					reject(err)
-				}
-				resolve(JSON.parse(body.toString()))
-			})
+        let result = await new Promise((resolve, reject) => {
+            Request(url, function (err, response, body) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(JSON.parse(body.toString()))
+            })
         })
         console.log(result)
         if (!_.has(result, 'openid')) {
             throw new ApiError('wechat.common', result.errcode + ' ' + result.errmsg)
         }
-        
+
         return result
     }
 
@@ -52,13 +103,13 @@ class WeChatSDK {
     async minaSession(code) {
         let url = `https://api.weixin.qq.com/sns/jscode2session?appid=${this.config.app_id}&secret=${this.config.app_secret}&js_code=${code}&grant_type=authorization_code`
         let sessionPromise = await new Promise((resolve, reject) => {
-			Request(url, function (err, response, body) {
-				if (err) {
-					reject(err)
-				}
-				resolve(JSON.parse(body.toString()))
-			})
-		})
+            Request(url, function (err, response, body) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(JSON.parse(body.toString()))
+            })
+        })
 
         let data = await sessionPromise
         console.log(data)
@@ -67,6 +118,32 @@ class WeChatSDK {
         }
 
         return data
+    }
+
+    async minaTmpQRCode(scene, page, options = { width: 430 }) {
+        console.log(this.config)
+        let url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + await this.getAccessToken()
+        let postData = {
+            page: page,
+            scene: scene,
+        }
+        if (_.has(options, 'width')) {
+            postData.width = options.width
+        }
+        if (_.has(options, 'auto_color')) {
+            postData.auto_color = options.auto_color
+        }
+        if (_.has(options, 'line_color')) {
+            postData.line_color = options.line_color
+        }
+        if (_.has(options, 'is_hyaline')) {
+            postData.is_hyaline = options.is_hyaline
+        }
+
+        let result = await this.post(url, postData)
+        console.log(result)
+
+        return result
     }
 
 }

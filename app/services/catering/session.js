@@ -1,7 +1,5 @@
 const ModelCustomer = require('../../model/catering/customer')
-const ModelCustomerToStore = require('../../model/catering/customer_to_store')
 const WeChatSDK = require('../../util/wechat/wechat_sdk')
-const DB = require('../../libraries/db')
 const Redis = require('../../libraries/redis')
 const Constant = require('../../libraries/constant')
 const Crypto = require('crypto')

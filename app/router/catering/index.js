@@ -20,6 +20,9 @@ module.exports = function () {
 
     // 统一图片处理
     Router.post('/api/catering/v1/customers/:uid/oss', CateringPermissions('user'), Customer.oss)
+
+    // 小程序码
+    Router.post('/api/catering/v1/customers/:uid/mina_qrcodes', CateringPermissions('user'), Customer.minaQRcode)
     
     return Router;
 }
