@@ -3,6 +3,7 @@ const Validate = require('request-validate')
 const ModelCustomer = require('../../model/catering/customer')
 const ModelSeller = require('../../model/catering/seller')
 const ApiError = require('../../util/api_error')
+const WeChatSDK = require('../../util/wechat/wechat_sdk')
 const _ = require('underscore')
 const OssSdk = require('../../libraries/ossSdk')
 const ConfigOss = require('../../../config/oss')
@@ -134,6 +135,44 @@ module.exports = {
 		let data = await ModelSeller.add(insertData)
 		insertData.id = data.insertId
 		return Response.output(ctx, insertData)
+
+	},
+
+	/**
+     * @api {post} /api/catering/v1/customer/:customerId/mina_qrcodes 小程序码
+	 * @apiVersion 1.0.0
+     * @apiGroup customer
+     * @apiPermission user
+	 * 
+	 * @apiDescription 小程序码
+	 * 
+     * @apiParam {String} action 行为['apply_seller']
+     * @apiParam {String} action_id 行为ID
+	 * 
+	 * @apiSuccess {String} data response data
+	 * 
+     * @apiSuccessExample {json} Visual Preview:
+		{
+			"code": 200,
+			"message": "请求成功",
+			"data": {}
+		}
+	 * @apiSampleRequest https://garylv.com/api/catering/v1/customers/:customerId/mina_qrcodes
+     */
+	minaQRcode: async function (ctx) {
+		Validate(ctx.input, {
+			action: 'required|in:apply_seller',
+			action_id: 'required|numeric',
+		})
+
+		let config = ctx.header['mina-source']
+		let wechatSdk = new WeChatSDK(config)
+
+		let sence = 'seller_id=' + ctx.input.action_id
+		let page = 'pages/admin/seller/audit'
+		let result = await wechatSdk.minaTmpQRCode(sence, page)
+
+		return Response.output(ctx, result)
 
 	},
 
