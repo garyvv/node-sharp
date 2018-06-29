@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "ali-mns": "^2.6.5",
+    "ali-oss": "^5.3.1",
     "aliyun-sdk": "^1.11.6",
     "babel-core": "^6.26.3",
+    "co": "^4.6.0",
     "gm": "^1.23.1",
     "ioredis": "^3.2.1",
     "knex": "^0.14.6",

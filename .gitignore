@@ -60,6 +60,11 @@ typings/
 config/*
 config
 
+# todo
 .travis.yml
 
+# IDE
 .vscode/
+
+# apidoc
+doc/
