@@ -1,6 +1,10 @@
 var constant = {
   "WECHAT_SESSION": "NS:API:WECHAT_SESSION:",
   "CATERING_SESSION": "NS:API:CATERING_SESSION:",
+
+  "AUDIT_INFO": "NS:API:AUDIT_INFO:",
+
+  "EXPIRE_REFRESH": 86400,
 }
 
 module.exports = constant

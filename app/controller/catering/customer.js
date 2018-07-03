@@ -108,7 +108,7 @@ module.exports = {
 			license: 'required',
 		})
 
-		let check = await ModelSeller.getByCustomerId(ctx.uid)
+		let check = await ModelSeller.first(ctx.uid)
 		if (check) {
 			let updateData = {
 				company: ctx.input.company,
@@ -117,14 +117,13 @@ module.exports = {
 				address: ctx.input.address,
 				license: ctx.input.license,
 			}
-			await ModelSeller.edit(updateData, {customer_id: ctx.uid})
-			updateData.customer_id = ctx.uid
-			updateData.id = check.id
+			await ModelSeller.edit(updateData, {seller_id: ctx.uid})
+			updateData.seller_id = ctx.uid
 			return Response.output(ctx, updateData)
 		}
 
 		let insertData = {
-			customer_id: ctx.uid,
+			seller_id: ctx.uid,
 			company: ctx.input.company,
 			avatar: ctx.input.avatar,
 			tel: ctx.input.tel,
@@ -133,7 +132,6 @@ module.exports = {
 		}
 
 		let data = await ModelSeller.add(insertData)
-		insertData.id = data.insertId
 		return Response.output(ctx, insertData)
 
 	},
