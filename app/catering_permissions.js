@@ -2,6 +2,7 @@ const Redis = require('./libraries/redis')
 const Constant = require('./libraries/constant')
 const ApiError = require('./util/api_error')
 const _ = require('underscore')
+const ServiceAudit = require('./services/catering/audit')
 
 module.exports = function (permission) {
 
@@ -40,6 +41,18 @@ module.exports = function (permission) {
 			await next()
 		}
 
+		async function checkAudit() {
+			await checkToken()
+			await isAudit()
+			await next()
+		}
+
+		async function isAudit() {
+			let check = await ServiceAudit.getAudit(ctx.uid)
+			if (_.isEmpty(check)) throw new ApiError('auth.error', 'no permission audit')
+			return true
+		}
+
 		// 检查header
 		if (!_.has(ctx.request.headers, 'store-id')) {
 			throw new ApiError('validate.error', 'store-id')
@@ -53,6 +66,8 @@ module.exports = function (permission) {
 			await next()
 		} else if (permission === 'user') {
 			return await checkUser()
+		} else if (permission === 'audit') {
+			return await checkAudit()
 		} else {
 			throw new ApiError('role.notExist')
 		}

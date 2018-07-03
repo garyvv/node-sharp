@@ -26,7 +26,9 @@ const apiErrorNames = {
     'warning': { code: 4004, message: ' %s ', status: 200 },
     'common.hadDelete': { code: 4006, message: ' %s 已删除', status: 500 },
 
-    'validate.error': { code: 50001, message: '参数异常 %s ' },
+    'validate.error': { code: 5001, message: '参数异常 %s ' },
+    
+    'audit.hadPass': { code: 6001, message: '审核已通过' },
 
 }
 

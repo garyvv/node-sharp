@@ -1,7 +1,7 @@
 const DB = require('../../libraries/db')
 const ModelBase = require('../../model/base')
 
-const table = 'mist_seller'
+const table = 'mist_audit'
 
 module.exports = {
     add: async function (data) {
@@ -15,7 +15,8 @@ module.exports = {
 			'*'
 		)
 			.from(table)
-			.where('seller_id', id)
+			.where('audit_id', id)
+			.where('status', 1)
 
 		return await result
 
