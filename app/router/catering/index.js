@@ -4,6 +4,7 @@ const CateringPermissions = require('../../catering_permissions')
 const Session = require('../../controller/catering/session')
 const Customer = require('../../controller/catering/customer')
 const Audit = require('../../controller/catering/audit')
+const Store = require('../../controller/catering/store')
 
 module.exports = function () {
     /**
@@ -25,7 +26,11 @@ module.exports = function () {
     // 小程序码
     Router.post('/api/catering/v1/customers/:uid/mina_qrcodes', CateringPermissions('user'), Customer.minaQRcode)
 
+    // 审核商家
     Router.post('/api/catering/v1/audits/:uid/sellers/:sellerId', CateringPermissions('audit'), Audit.seller)
+
+    // 商店信息
+    Router.get('/api/catering/v1/stores/:storeId', CateringPermissions('store'), Store.detail)
 
     return Router;
 }

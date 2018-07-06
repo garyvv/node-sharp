@@ -3,6 +3,7 @@ const Constant = require('./libraries/constant')
 const ApiError = require('./util/api_error')
 const _ = require('underscore')
 const ServiceAudit = require('./services/catering/audit')
+const ServiceStore = require('./services/catering/store')
 
 module.exports = function (permission) {
 
@@ -47,9 +48,23 @@ module.exports = function (permission) {
 			await next()
 		}
 
+		async function checkStore() {
+			await checkToken()
+			await ownerStore()
+			await next()
+		}
+
 		async function isAudit() {
 			let check = await ServiceAudit.getAudit(ctx.uid)
 			if (_.isEmpty(check)) throw new ApiError('auth.error', 'no permission audit')
+			return true
+		}
+
+		async function ownerStore() {
+			let storeId = ctx.params.storeId
+			let check = await ServiceStore.getStore(storeId)
+			if (_.isEmpty(check)) throw new ApiError('auth.error', 'no permission store')
+			if (check.seller_id != ctx.uid) throw new ApiError('auth.notPermission')
 			return true
 		}
 
@@ -68,6 +83,8 @@ module.exports = function (permission) {
 			return await checkUser()
 		} else if (permission === 'audit') {
 			return await checkAudit()
+		} else if (permission === 'store') {
+			return await checkStore()
 		} else {
 			throw new ApiError('role.notExist')
 		}
