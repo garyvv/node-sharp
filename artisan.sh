@@ -23,7 +23,6 @@ apiClass=`echo ${apiName} | awk '{print toupper(substr($0,0,1))substr($0,2,lengt
 controllerFile=app/controller/${folder}${apiName}.js
 touch ${controllerFile}
 cat > ${controllerFile} << EOL
-const Validate = require('request-validate')
 const Response = require('../../util/response')
 const Service${apiClass} = require('../../services/${folder}${apiName}')
 
@@ -49,7 +48,33 @@ module.exports = {
         }
      */
     index: async function (ctx) {
-        let data = []
+        let data = await Service${apiClass}.list()
+
+        return Response.output(ctx, data)
+    },
+
+    /**
+     * @api {get} /api/${folder}v1/${apiName}s/:${apiName}Id ${apiName}详情
+     * @apiGroup ${apiName}
+     * @apiPermission todo
+     * @apiVersion 1.0.0
+     * @apiParam {String} param 参数
+     * @apiSuccess {String} data 返回数据
+     * @apiSuccessExample {json} Visual Preview:
+     * {
+            "success": true,
+            "code": 200,
+            "message": "请求成功",
+            "data": [
+                {
+                    "id": 1,
+                },
+                ....
+            ]
+        }
+     */
+    detail: async function (ctx) {
+        let data = await Service${apiClass}.detail()
 
         return Response.output(ctx, data)
     },
@@ -72,10 +97,6 @@ module.exports = {
         }
      */
     add: async function (ctx) {
-        Validate(ctx.input, {
-            name: 'required',
-        })
-
         let result = []
 
         return Response.output(ctx, result)
@@ -101,10 +122,7 @@ module.exports = {
         }
      */
     edit: async function (ctx) {
-        Validate(ctx.input, {
-            exchange_banner_id: 'numeric',
-        })
-        let result = await Service${apiClass}.edit()
+        let result = await Service${apiClass}.edit(ctx.params.${apiName}Id, ctx.input)
 
         return Response.output(ctx, result)
     },
@@ -123,6 +141,10 @@ module.exports = {
         }
      */
     delete: async function (ctx) {
+        let data = {
+            status: -1
+        }
+        let result = await Service${apiClass}.edit(ctx.params.${apiName}Id, data)
         return Response.output(ctx)
     },
 
@@ -135,6 +157,8 @@ touch ${servicesFile}
 cat > ${servicesFile} << EOL
 const Model${apiClass} = require('../../model/${folder}${apiName}')
 const ApiError = require('../../util/api_error')
+const Validate = require('request-validate')
+const _ = require('underscore')
 
 module.exports = {
     list: async function () {
@@ -142,22 +166,42 @@ module.exports = {
     },
 
     detail: async function (id) {
-        return await Model${apiClass}.first(id)
+        let result = await Model${apiClass}.first(id)
+        if (_.isEmpty(result)) {
+            throw new ApiError('common.notExist', '${apiName}')
+        }
+        
+        return result
     },
 
     add: async function (data) {
-        let insertResult = await Model${apiClass}.add(data)
-        
-        return insertResult
+        Validate(data, {
+            name: 'required',
+        })
+        let insertData = {
+            name: data.name
+        }
+        let insertResult = await Model${apiClass}.add(insertData)
+        insertData.id = insertResult.insertId
+
+        return insertData
     },
 
     edit: async function (id, data) {
+        let detail = await this.detail(id)
+
         let where = {
             id: id
         }
+
+        let updateData = {
+            name: _.has(data, 'name') ? data.name : detail.name,
+            status: _.has(data, 'status') ? data.status : detail.status
+        }
+
         let editResult = await Model${apiClass}.edit(data, where)
 
-        return editResult
+        return updateData
     },
 
 }
