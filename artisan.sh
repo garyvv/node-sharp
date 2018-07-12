@@ -74,7 +74,7 @@ module.exports = {
         }
      */
     detail: async function (ctx) {
-        let data = await Service${apiClass}.detail()
+        let data = await Service${apiClass}.detail(ctx.params.${apiName}Id)
 
         return Response.output(ctx, data)
     },
@@ -97,7 +97,7 @@ module.exports = {
         }
      */
     add: async function (ctx) {
-        let result = []
+        let result = await Service${apiClass}.add(ctx.input)
 
         return Response.output(ctx, result)
     },
@@ -161,13 +161,18 @@ const Validate = require('request-validate')
 const _ = require('underscore')
 
 module.exports = {
-    list: async function () {
-        return []
+    list: async function (kid) {
+        let result = await Model${apiClass}.list(kid)
+        return result
     },
 
     detail: async function (id) {
         let result = await Model${apiClass}.first(id)
         if (_.isEmpty(result)) {
+            throw new ApiError('common.notExist', '${apiName}')
+        }
+
+        if (result.status == -1) {
             throw new ApiError('common.notExist', '${apiName}')
         }
         
@@ -199,7 +204,7 @@ module.exports = {
             status: _.has(data, 'status') ? data.status : detail.status
         }
 
-        let editResult = await Model${apiClass}.edit(data, where)
+        let editResult = await Model${apiClass}.edit(updateData, where)
 
         return updateData
     },
@@ -221,6 +226,19 @@ module.exports = {
         let res = await ModelBase.execInsert(table, data)
         return res;
     },
+
+	list: async function (kid) {
+
+		let result = DB.readMysql.select(
+			'*'
+		)
+			.from(table)
+			.where('kid', kid)
+			.where('status', '!=', -1)
+
+		return await result
+
+	},
 
 	first: async function (id) {
 
