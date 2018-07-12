@@ -52,7 +52,7 @@ module.exports = {
             status: _.has(data, 'status') ? data.status : detail.status
         }
 
-        let editResult = await ModelDesk.edit(data, where)
+        let editResult = await ModelDesk.edit(updateData, where)
 
         return updateData
     },

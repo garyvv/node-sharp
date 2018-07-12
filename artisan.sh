@@ -173,7 +173,7 @@ module.exports = {
         }
 
         if (result.status == -1) {
-            throw new ApiError('common.notExist', 'category')
+            throw new ApiError('common.notExist', '${apiName}')
         }
         
         return result
@@ -204,7 +204,7 @@ module.exports = {
             status: _.has(data, 'status') ? data.status : detail.status
         }
 
-        let editResult = await Model${apiClass}.edit(data, where)
+        let editResult = await Model${apiClass}.edit(updateData, where)
 
         return updateData
     },

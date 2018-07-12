@@ -7,6 +7,7 @@ const Audit = require('../../controller/catering/audit')
 const Store = require('../../controller/catering/store')
 const Category = require('../../controller/catering/category')
 const Desk = require('../../controller/catering/desk')
+const Product = require('../../controller/catering/product')
 
 module.exports = function () {
     /**
@@ -47,6 +48,13 @@ module.exports = function () {
     Router.get('/api/catering/v1/stores/:storeId/desks/:deskId', CateringPermissions('store'), Desk.detail)
     Router.put('/api/catering/v1/stores/:storeId/desks/:deskId', CateringPermissions('store'), Desk.edit)
     Router.delete('/api/catering/v1/stores/:storeId/desks/:deskId', CateringPermissions('store'), Desk.delete)
+    
+    // 店铺商品
+    Router.get('/api/catering/v1/stores/:storeId/products', CateringPermissions('store'), Product.index)
+    Router.post('/api/catering/v1/stores/:storeId/products', CateringPermissions('store'), Product.add)
+    Router.get('/api/catering/v1/stores/:storeId/products/:productId', CateringPermissions('store'), Product.detail)
+    Router.put('/api/catering/v1/stores/:storeId/products/:productId', CateringPermissions('store'), Product.edit)
+    Router.delete('/api/catering/v1/stores/:storeId/products/:productId', CateringPermissions('store'), Product.delete)
 
     return Router;
 }
