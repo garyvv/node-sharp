@@ -5,6 +5,7 @@ const Session = require('../../controller/catering/session')
 const Customer = require('../../controller/catering/customer')
 const Audit = require('../../controller/catering/audit')
 const Store = require('../../controller/catering/store')
+const Category = require('../../controller/catering/category')
 
 module.exports = function () {
     /**
@@ -31,6 +32,13 @@ module.exports = function () {
 
     // 商店信息
     Router.get('/api/catering/v1/stores/:storeId', CateringPermissions('store'), Store.detail)
+    
+    // 商店分类
+    Router.get('/api/catering/v1/stores/:storeId/categories', CateringPermissions('store'), Category.index)
+    Router.post('/api/catering/v1/stores/:storeId/categories', CateringPermissions('store'), Category.add)
+    Router.get('/api/catering/v1/stores/:storeId/categories/:categoryId', CateringPermissions('store'), Category.detail)
+    Router.put('/api/catering/v1/stores/:storeId/categories/:categoryId', CateringPermissions('store'), Category.edit)
+    Router.delete('/api/catering/v1/stores/:storeId/categories/:categoryId', CateringPermissions('store'), Category.delete)
 
     return Router;
 }
