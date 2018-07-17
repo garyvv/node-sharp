@@ -1,6 +1,6 @@
 {
     "apps": [{
-        "name": "NodeSharp",
+        "name": "node-sharp",
         "script": "./app/index.js",
         "watch": false
     }]
