@@ -223,8 +223,8 @@ const table = 'mist_${apiName}'
 
 module.exports = {
     add: async function (data) {
-        let res = await ModelBase.execInsert(table, data)
-        return res;
+        let res = ModelBase.execInsert(table, data)
+        return await res;
     },
 
 	list: async function (kid) {
@@ -253,7 +253,7 @@ module.exports = {
 	},
 
 	edit: async function (data, where, notWhere = {}) {
-		let result = await ModelBase.execUpdate(table, data, where, notWhere)
+		let result = ModelBase.execUpdate(table, data, where, notWhere)
 
 		return await result
 	}

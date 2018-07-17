@@ -11,33 +11,33 @@ module.exports = {
 
 	list: async function (storeId) {
 
-		let result = DB.readMysql.select(
+		let result = await DB.readMysql.select(
 			'*'
 		)
 			.from(table)
 			.where('store_id', storeId)
 			.where('status', '!=', -1)
 
-		return await result
+		return result
 
 	},
 
 	first: async function (id) {
 
-		let result = DB.readMysql.first(
+		let result = await DB.readMysql.first(
 			'*'
 		)
 			.from(table)
 			.where('id', id)
 
-		return await result
+		return result
 
 	},
 
 	edit: async function (data, where, notWhere = {}) {
 		let result = await ModelBase.execUpdate(table, data, where, notWhere)
 
-		return await result
+		return result
 	}
 
 }

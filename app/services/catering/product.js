@@ -4,8 +4,8 @@ const Validate = require('request-validate')
 const _ = require('underscore')
 
 module.exports = {
-    list: async function (storeId) {
-        let result = await ModelProduct.list(storeId)
+    list: async function (storeId, filter = {}) {
+        let result = await ModelProduct.list(storeId, filter)
         return result
     },
 

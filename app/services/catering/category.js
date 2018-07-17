@@ -5,7 +5,7 @@ const _ = require('underscore')
 
 module.exports = {
     list: async function (storeId, filter = {}) {
-        let result = await ModelCategory.list(storeId)
+        let result = await ModelCategory.list(storeId, filter)
         return result
     },
 
