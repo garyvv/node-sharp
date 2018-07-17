@@ -21,8 +21,20 @@ module.exports = {
 
 	},
 
+	getSellerStores: async function (sellerId) {
+
+		let result = DB.readMysql.select(
+			'*'
+		)
+			.from(table)
+			.where('seller_id', sellerId)
+
+		return await result
+
+	},
+
 	edit: async function (data, where, notWhere = {}) {
-		let result = await ModelBase.execUpdate(table, data, where, notWhere)
+		let result = ModelBase.execUpdate(table, data, where, notWhere)
 
 		return await result
 	}

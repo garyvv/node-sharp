@@ -5,9 +5,22 @@ const table = 'mist_seller'
 
 module.exports = {
     add: async function (data) {
-        let res = await ModelBase.execInsert(table, data)
-        return res;
+        let res = ModelBase.execInsert(table, data)
+        return await res;
     },
+
+	list: async function (kid) {
+
+		let result = DB.readMysql.select(
+			'*'
+		)
+			.from(table)
+			.where('kid', kid)
+			.where('status', '!=', -1)
+
+		return await result
+
+	},
 
 	first: async function (id) {
 
@@ -15,14 +28,14 @@ module.exports = {
 			'*'
 		)
 			.from(table)
-			.where('seller_id', id)
+			.where('id', id)
 
 		return await result
 
 	},
 
 	edit: async function (data, where, notWhere = {}) {
-		let result = await ModelBase.execUpdate(table, data, where, notWhere)
+		let result = ModelBase.execUpdate(table, data, where, notWhere)
 
 		return await result
 	}

@@ -8,6 +8,8 @@ const Store = require('../../controller/catering/store')
 const Category = require('../../controller/catering/category')
 const Desk = require('../../controller/catering/desk')
 const Product = require('../../controller/catering/product')
+const Viewer = require('../../controller/catering/viewer')
+const Seller = require('../../controller/catering/seller')
 
 module.exports = function () {
     /**
@@ -35,6 +37,9 @@ module.exports = function () {
     // 商店信息
     Router.get('/api/catering/v1/stores/:storeId', CateringPermissions('store'), Store.detail)
     
+    // 商店列表
+    Router.get('/api/catering/v1/sellers/:sellerId/stores', CateringPermissions('user'), Seller.stores)
+    
     // 商店分类
     Router.get('/api/catering/v1/stores/:storeId/categories', CateringPermissions('store'), Category.index)
     Router.post('/api/catering/v1/stores/:storeId/categories', CateringPermissions('store'), Category.add)
@@ -55,6 +60,10 @@ module.exports = function () {
     Router.get('/api/catering/v1/stores/:storeId/products/:productId', CateringPermissions('store'), Product.detail)
     Router.put('/api/catering/v1/stores/:storeId/products/:productId', CateringPermissions('store'), Product.edit)
     Router.delete('/api/catering/v1/stores/:storeId/products/:productId', CateringPermissions('store'), Product.delete)
+
+    // 店铺Viewer Category
+    Router.get('/api/catering/v1/viewers/:viewerId/categories', CateringPermissions('guest'), Viewer.categories)
+    Router.get('/api/catering/v1/viewers/:viewerId/products', CateringPermissions('guest'), Viewer.products)
 
     return Router;
 }

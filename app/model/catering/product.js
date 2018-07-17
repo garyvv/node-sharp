@@ -1,5 +1,6 @@
 const DB = require('../../libraries/db')
 const ModelBase = require('../../model/base')
+const _ = require('underscore')
 
 const table = 'mist_product'
 
@@ -16,7 +17,13 @@ module.exports = {
 		)
 			.from(table)
 			.where('store_id', storeId)
-			.where('status', '!=', -1)
+			.whereNot('status', -1)
+
+		if (_.has(filter, 'status')) result.where('status', filter.status)
+
+		if (_.has(filter, 'category_id')) {
+			// todo
+		}
 
 		return await result
 
@@ -35,7 +42,7 @@ module.exports = {
 	},
 
 	edit: async function (data, where, notWhere = {}) {
-		let result = await ModelBase.execUpdate(table, data, where, notWhere)
+		let result = ModelBase.execUpdate(table, data, where, notWhere)
 
 		return await result
 	}

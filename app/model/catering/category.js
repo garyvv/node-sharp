@@ -1,5 +1,6 @@
 const DB = require('../../libraries/db')
 const ModelBase = require('../../model/base')
+const _ = require('underscore')
 
 const table = 'mist_category'
 
@@ -9,14 +10,16 @@ module.exports = {
 		return res;
 	},
 
-	list: async function (storeId) {
+	list: async function (storeId, filter = {}) {
 
 		let result = DB.readMysql.select(
 			'*'
 		)
 			.from(table)
 			.where('store_id', storeId)
-			.where('status', '!=', -1)
+			.whereNot('status', -1)
+
+		if (_.has(filter, 'status')) result.where('status', filter.status)
 
 		return await result
 
@@ -24,20 +27,20 @@ module.exports = {
 
 	first: async function (id) {
 
-		let result = DB.readMysql.first(
+		let result = await DB.readMysql.first(
 			'*'
 		)
 			.from(table)
 			.where('id', id)
 
-		return await result
+		return result
 
 	},
 
 	edit: async function (data, where, notWhere = {}) {
 		let result = await ModelBase.execUpdate(table, data, where, notWhere)
 
-		return await result
+		return result
 	},
 
 	getMaxSort: async function (storeId) {

@@ -13,32 +13,32 @@ module.exports = {
 
 	getCustomerByOpenId: async function (openid) {
 
-		let user = DB.readMysql.first(
+		let user = await DB.readMysql.first(
 			'*'
 		)
 			.from(table)
 			.where('openid', openid)
 
-		return await user
+		return user
 
 	},
 
 	first: async function (customerId) {
 
-		let user = DB.readMysql.first(
+		let user = await DB.readMysql.first(
 			'*'
 		)
 			.from(table)
 			.where('id', customerId)
 
-		return await user
+		return user
 
 	},
 
 	edit: async function (data, where, notWhere = {}) {
 		let result = await ModelBase.execUpdate(table, data, where, notWhere)
 
-		return await result
+		return result
 	}
 
 }
