@@ -28,7 +28,7 @@ module.exports = {
 			'*'
 		)
 			.from(table)
-			.where('id', id)
+			.where('seller_id', id)
 
 		return await result
 
