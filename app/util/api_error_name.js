@@ -30,6 +30,8 @@ const apiErrorNames = {
     
     'audit.hadPass': { code: 6001, message: '审核已通过' },
 
+    'wechat.minaCode': { code: 7001, message: '小程序码生成失败' },
+
 }
 
 module.exports = function (errorName, params) {

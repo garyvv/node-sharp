@@ -6,7 +6,8 @@
         "ignore_watch": [
             "node_modules",
             "logs",
-            "doc"
+            "doc",
+            "static"
         ]
     }]
 }
