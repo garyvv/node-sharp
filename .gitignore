@@ -68,6 +68,3 @@ config
 
 # apidoc
 doc/
-
-# static
-static/*
