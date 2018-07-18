@@ -3,6 +3,8 @@ const ApiError = require('../api_error')
 const Request = require('request')
 const WXBizDataCrypt = require('./WXBizDataCrypt.js')
 const Redis = require('../../libraries/redis')
+const fs = require('fs')
+const Uuid = require('../../util/uuid')
 
 // 可配置的
 const WECHAT_CONFIG = ['mina', 'catering']
@@ -42,7 +44,7 @@ class WeChatSDK {
                 if (err) {
                     reject(err)
                 }
-                resolve(JSON.parse(body.toString()))
+                resolve(body)
             })
         })
         return result
@@ -140,10 +142,29 @@ class WeChatSDK {
             postData.is_hyaline = options.is_hyaline
         }
 
-        let result = await this.post(url, postData)
-        console.log(result)
+        let imgData = await this.post(url, postData)
+        let imgName = await Uuid.genOrderNo() + '.jpg'
+        let imgFile =  __dirname + '/../../../static/' + imgName
+        let img = await new Promise((resolve, reject) => {
+            fs.writeFile(imgFile, imgData, function(err) {
+                if(err) {
+                    console.log(err)
+                    reject(false)
+                }
+                resolve(true)
+            })
+        })
+        if (img != true) {
+            fs.unlink(imgFile)
+            throw new ApiError('wechat.minaCode')
+        }
+        console.log(imgFile)
 
-        return result
+        return {
+            img_name: imgName,
+            img_file: imgFile,
+            img_data: imgData
+        }
     }
 
 }

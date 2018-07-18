@@ -168,7 +168,16 @@ module.exports = {
 
 		let sence = 'seller_id=' + ctx.input.action_id
 		let page = 'pages/admin/seller/audit'
-		let result = await wechatSdk.minaTmpQRCode(sence, page)
+		let imgResult = await wechatSdk.minaTmpQRCode(sence, page)
+
+		let ossSdk = new OssSdk(ConfigOss.catering)
+		let object = 'customer/' + ctx.uid + '/qrcode/' +  imgResult.img_name
+		await ossSdk.uploadFile(object, imgResult.img_file)
+
+		let result = {
+			'object': object,
+			'url': ConfigOss.catering.view_server + object
+		}
 
 		return Response.output(ctx, result)
 
