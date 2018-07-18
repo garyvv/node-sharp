@@ -37,14 +37,18 @@ class WeChatSDK {
             url: url,
             headers: headers,
             method: 'POST',
-            form:  JSON.stringify(data)
+            form:  JSON.stringify(data),
+            encoding: null
         }
         let result = await new Promise((resolve, reject) => {
             Request(options, function (err, response, body) {
                 if (err) {
                     reject(err)
                 }
-                resolve(body)
+                resolve({
+                    headers: response.headers,
+                    body: body
+                })
             })
         })
         return result
@@ -142,8 +146,10 @@ class WeChatSDK {
             postData.is_hyaline = options.is_hyaline
         }
 
-        let imgData = await this.post(url, postData)
-        let imgName = await Uuid.genOrderNo() + '.jpg'
+        let postRes = await this.post(url, postData)
+        let imgData = postRes.body
+        let contentType = postRes.headers["content-type"]
+        let imgName = await Uuid.genOrderNo() + '.' + contentType.split('/').pop()
         let imgFile =  __dirname + '/../../../static/' + imgName
         let img = await new Promise((resolve, reject) => {
             fs.writeFile(imgFile, imgData, function(err) {

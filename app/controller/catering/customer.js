@@ -8,6 +8,7 @@ const _ = require('underscore')
 const OssSdk = require('../../libraries/ossSdk')
 const ConfigOss = require('../../../config/oss')
 const Uuid = require('../../libraries/uuid')
+const fs = require('fs')
 
 module.exports = {
 
@@ -117,7 +118,7 @@ module.exports = {
 				address: ctx.input.address,
 				license: ctx.input.license,
 			}
-			await ModelSeller.edit(updateData, {seller_id: ctx.uid})
+			await ModelSeller.edit(updateData, { seller_id: ctx.uid })
 			updateData.seller_id = ctx.uid
 			return Response.output(ctx, updateData)
 		}
@@ -171,8 +172,15 @@ module.exports = {
 		let imgResult = await wechatSdk.minaTmpQRCode(sence, page)
 
 		let ossSdk = new OssSdk(ConfigOss.catering)
-		let object = 'customer/' + ctx.uid + '/qrcode/' +  imgResult.img_name
+		let object = 'customer/' + ctx.uid + '/qrcode/' + imgResult.img_name
 		await ossSdk.uploadFile(object, imgResult.img_file)
+
+		fs.unlink(imgResult.img_file, function (err) {
+			if (err) {
+				console.log(err)
+			}
+			console.log('文件:' + imgResult.img_file + '删除成功！')
+		})
 
 		let result = {
 			'object': object,
@@ -198,7 +206,7 @@ module.exports = {
 
 		let ossSdk = new OssSdk(ConfigOss.catering)
 		let fileType = files.type.split('/').pop()
-		let object = 'customer/' + ctx.uid + '/' + postData.folder + '/' +  await Uuid.genOrderNo() + '.' + fileType
+		let object = 'customer/' + ctx.uid + '/' + postData.folder + '/' + await Uuid.genOrderNo() + '.' + fileType
 		await ossSdk.uploadFile(object, files.path)
 
 		let resp = {
