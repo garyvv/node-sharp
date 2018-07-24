@@ -2,10 +2,15 @@ const ModelProduct = require('../../model/catering/product')
 const ApiError = require('../../util/api_error')
 const Validate = require('request-validate')
 const _ = require('underscore')
+const ConfigOss = require('../../../config/oss')
 
 module.exports = {
     list: async function (storeId, filter = {}) {
         let result = await ModelProduct.list(storeId, filter)
+        result.forEach(element => {
+            element.thumb = ConfigOss.catering.view_server + element.thumb
+            element.status_text = element.status == 1 ? '上架' : '下架'
+        })
         return result
     },
 

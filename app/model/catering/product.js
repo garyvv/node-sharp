@@ -10,7 +10,7 @@ module.exports = {
         return res;
     },
 
-	list: async function (storeId) {
+	list: async function (storeId, filter) {
 
 		let result = DB.readMysql.select(
 			'*'
