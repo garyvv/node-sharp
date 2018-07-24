@@ -68,3 +68,6 @@ config
 
 # apidoc
 doc/
+
+# mac 
+.DS_Store
