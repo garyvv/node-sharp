@@ -8,7 +8,8 @@ module.exports = {
     list: async function (storeId, filter = {}) {
         let result = await ModelProduct.list(storeId, filter)
         result.forEach(element => {
-            element.thumb = ConfigOss.catering.view_server + element.thumb
+            element.preview_thumb = ''
+            if (element.thumb) element.preview_thumb = ConfigOss.catering.view_server + element.thumb + '?x-oss-process=style/preview'
             element.status_text = element.status == 1 ? '上架' : '下架'
         })
         return result
