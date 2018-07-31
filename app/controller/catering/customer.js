@@ -211,7 +211,7 @@ module.exports = {
 
 		let resp = {
 			'object': object,
-			'url': ConfigOss.catering.view_server + object
+			'url': ConfigOss.catering.view_server + object + '?x-oss-process=style/preview'
 		}
 
 		return Response.output(ctx, resp)
