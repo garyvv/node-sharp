@@ -28,6 +28,8 @@ module.exports = {
         if (result.status == -1) {
             throw new ApiError('common.notExist', 'product')
         }
+
+        if (result.thumb) result.preview_thumb = ConfigOss.catering.view_server + result.thumb + '?x-oss-process=style/preview'
         
         return result
     },
