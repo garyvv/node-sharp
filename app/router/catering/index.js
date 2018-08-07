@@ -50,6 +50,7 @@ module.exports = function () {
     // 店铺桌子
     Router.get('/api/catering/v1/stores/:storeId/desks', CateringPermissions('store'), Desk.index)
     Router.post('/api/catering/v1/stores/:storeId/desks', CateringPermissions('store'), Desk.add)
+    Router.post('/api/catering/v1/stores/:storeId/desk_qrcodes/:deskId', CateringPermissions('store'), Desk.minaQRcode)
     Router.get('/api/catering/v1/stores/:storeId/desks/:deskId', CateringPermissions('store'), Desk.detail)
     Router.put('/api/catering/v1/stores/:storeId/desks/:deskId', CateringPermissions('store'), Desk.edit)
     Router.delete('/api/catering/v1/stores/:storeId/desks/:deskId', CateringPermissions('store'), Desk.delete)
