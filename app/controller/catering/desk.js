@@ -164,7 +164,7 @@ module.exports = {
 		let config = ctx.header['mina-source']
 		let wechatSdk = new WeChatSDK(config)
 
-		let sence = 'desk_id=' + ctx.params.deskId
+		let sence = 'desk_id=' + ctx.params.deskId + '&store_id=' + ctx.params.storeId
 		let page = 'pages/viewer/store'
 		let imgResult = await wechatSdk.minaTmpQRCode(sence, page)
 
