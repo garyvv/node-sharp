@@ -79,7 +79,7 @@ module.exports = {
      */
     products: async function (ctx) {
         Validate(ctx.input, {
-            'category_id': 'required|nunumericm'
+            'category_id': 'required|numeric'
         })
         let data = await ServiceProducts.list(ctx.params.viewerId, { status: 1, categroy_id: ctx.input.category_id })
 
