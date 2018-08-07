@@ -126,6 +126,12 @@ class WeChatSDK {
         return data
     }
 
+    /**
+     * @param {*} scene 
+     * @param {*} page 
+     * @param {*} options 
+     * @returns {img_name: imgName, img_file: imgFile, img_data: imgData, img_type: imgType}
+     */
     async minaTmpQRCode(scene, page, options = { width: 430 }) {
         console.log(this.config)
         let url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + await this.getAccessToken()
@@ -149,7 +155,8 @@ class WeChatSDK {
         let postRes = await this.post(url, postData)
         let imgData = postRes.body
         let contentType = postRes.headers["content-type"]
-        let imgName = await Uuid.genOrderNo() + '.' + contentType.split('/').pop()
+        let imgType = contentType.split('/').pop()
+        let imgName = await Uuid.genOrderNo() + '.' + imgType
         let imgFile =  __dirname + '/../../../static/' + imgName
         let img = await new Promise((resolve, reject) => {
             fs.writeFile(imgFile, imgData, function(err) {
@@ -169,7 +176,8 @@ class WeChatSDK {
         return {
             img_name: imgName,
             img_file: imgFile,
-            img_data: imgData
+            img_data: imgData,
+            img_type: imgType
         }
     }
 
