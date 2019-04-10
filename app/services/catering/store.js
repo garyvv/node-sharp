@@ -10,7 +10,14 @@ module.exports = {
         if (_.isEmpty(result)) {
             result = await ModelStore.first(id)
             if (_.isEmpty(result)) return false
-            else await Redis.set(cacheKey, JSON.stringify(result))
+            
+            result.preview_thumb = result.thumb
+            result.preview_license = result.license
+            if (result.thumb && result.thumb.indexOf('http') < 0) result.preview_thumb = ConfigOss.catering.view_server + result.thumb + '?x-oss-process=style/preview'
+            if (result.license && result.license.indexOf('http') < 0) result.preview_license = ConfigOss.catering.view_server + result.preview_license + '?x-oss-process=style/preview'
+            
+            // set Cache
+            await Redis.set(cacheKey, JSON.stringify(result))
         } else {
             result = JSON.parse(result)
         }

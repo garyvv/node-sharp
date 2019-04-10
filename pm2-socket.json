@@ -1,0 +1,14 @@
+{
+    "apps": [{
+        "name": "NodeSharp-socket",
+        "script": "./app/socket.js",
+        "watch": true,
+        "ignore_watch": [
+            "node_modules",
+            "logs",
+            "doc",
+            "static",
+            ".git"
+        ]
+    }]
+}

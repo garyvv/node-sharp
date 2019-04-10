@@ -25,8 +25,10 @@ module.exports = {
         }
 
         result.forEach(element => {
-            element.preview_thumb = ''
+            element.preview_thumb = element.thumb
+            element.preview_license = element.license
             if (element.thumb && element.thumb.indexOf('http') < 0) element.preview_thumb = ConfigOss.catering.view_server + element.thumb + '?x-oss-process=style/preview'
+            if (element.license && element.license.indexOf('http') < 0) element.preview_license = ConfigOss.catering.view_server + element.preview_license + '?x-oss-process=style/preview'
         })
 
         return result
